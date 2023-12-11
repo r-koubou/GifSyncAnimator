@@ -13,6 +13,8 @@
 GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor (GifSyncAnimatorAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    context = new rkoubou::GifSync::Context();
+    context->loadGif( juce::File( "C:/UserData/Develop/Project/JUCE/MyFirstProject/giphy.gif" ) );
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
@@ -20,6 +22,7 @@ GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor (GifSyn
 
 GifSyncAnimatorAudioProcessorEditor::~GifSyncAnimatorAudioProcessorEditor()
 {
+    delete context;
 }
 
 //==============================================================================
