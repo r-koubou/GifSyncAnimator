@@ -132,6 +132,10 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Context.cpp" />
+    <ClCompile Include="..\..\Source\GifAnimationComponent.cpp" />
+    <ClCompile Include="..\..\Source\GifAnimator.cpp" />
+    <ClCompile Include="..\..\Source\GifModel.cpp" />
     <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
     <ClCompile Include="..\..\Source\PluginEditor.cpp" />
     <ClCompile Include="..\..\..\..\..\SDK\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
@@ -2401,6 +2405,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Context.h" />
+    <ClInclude Include="..\..\Source\GifAnimationComponent.h" />
+    <ClInclude Include="..\..\Source\GifAnimator.h" />
     <ClInclude Include="..\..\Source\GifModel.h" />
     <ClInclude Include="..\..\Source\PluginProcessor.h" />
     <ClInclude Include="..\..\Source\PluginEditor.h" />

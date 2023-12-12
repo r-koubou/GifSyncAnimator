@@ -12,6 +12,7 @@
 #include "PluginProcessor.h"
 
 #include "Context.h"
+#include "GifAnimationComponent.h"
 
 //==============================================================================
 /**
@@ -32,6 +33,7 @@ private:
     GifSyncAnimatorAudioProcessor& audioProcessor;
 
     rkoubou::GifSync::Context* context;
+    rkoubou::GifSync::GifAnimationComponent* gifComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GifSyncAnimatorAudioProcessorEditor)
 };

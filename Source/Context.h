@@ -3,25 +3,25 @@
 #include <JuceHeader.h>
 
 #include "GifModel.h"
+#include "GifAnimator.h"
 
 namespace rkoubou::GifSync
 {
 
-    class Context {
+    class Context
+    {
     private:
+        bool loaded = false;
+        juce::AudioProcessor& processor;
         std::unique_ptr<GifModel> gifModel;
+        std::unique_ptr<GifAnimator> gifAnimator;
     public:
-        Context() {}
-        ~Context() {}
+        Context( juce::AudioProcessor& processor );
+        ~Context();
 
-        GifModel& getGifModel()
-        {
-            return *gifModel;
-        }
-
-        void loadGif( const juce::File& file )
-        {
-            gifModel = std::make_unique<GifModel>( file );
-        }
+        GifModel& getGifModel() const;
+        GifAnimator& getGifAnimator() const;
+        void loadGif( const juce::File& file );
+        bool isLoaded() const;
     };
 }

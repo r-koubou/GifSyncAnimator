@@ -2886,6 +2886,18 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\GifModel.cpp">
+      <Filter>GifSyncAnimator\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GifAnimator.cpp">
+      <Filter>GifSyncAnimator\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Context.cpp">
+      <Filter>GifSyncAnimator\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GifAnimationComponent.cpp">
+      <Filter>GifSyncAnimator\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
@@ -5754,6 +5766,12 @@
       <Filter>GifSyncAnimator\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\GifModel.h">
+      <Filter>GifSyncAnimator\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GifAnimator.h">
+      <Filter>GifSyncAnimator\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GifAnimationComponent.h">
       <Filter>GifSyncAnimator\Source</Filter>
     </ClInclude>
   </ItemGroup>
