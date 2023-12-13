@@ -24,6 +24,7 @@ namespace rkoubou::GifSync
         GifModel& getGifModel() const;
         GifAnimator& getGifAnimator() const;
         void loadGif( const juce::File& file );
+        void loadGif( juce::MemoryBlock& block );
         bool isLoaded() const;
     };
 }

@@ -48,8 +48,10 @@ namespace rkoubou::GifSync
         std::unique_ptr<juce::MemoryBlock>& getGifData() noexcept;
 
     private:
+        void reset();
 
 #pragma region Gif loading
+        bool loadGifImpl( void* gifData, size_t gifSize );
         void gifFrameWriter( const GIF_WHDR& whdr );
         static void gifFrameCallback( void* data, struct GIF_WHDR* whdr );
 #pragma endregion

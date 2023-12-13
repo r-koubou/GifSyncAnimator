@@ -32,6 +32,13 @@ namespace rkoubou::GifSync
         loaded = gifModel.get()->isLoaded();
     }
 
+    void Context::loadGif( juce::MemoryBlock& block )
+    {
+        gifModel = std::make_unique<GifModel>( block );
+        gifAnimator = std::make_unique<GifAnimator>( processor, *gifModel );
+        loaded = gifModel.get()->isLoaded();
+    }
+
     bool Context::isLoaded() const
     {
         return loaded;

@@ -9,30 +9,28 @@ namespace rkoubou::GifSync
         width = 0;
         height = 0;
 
-        gifData = std::make_unique<juce::MemoryBlock>();
-
-        if( !gifFile.existsAsFile() )
+        try
         {
-            return;
+            gifData = std::make_unique<juce::MemoryBlock>();
+
+            if( !gifFile.existsAsFile() )
+            {
+                return;
+            }
+
+            bool result = gifFile.loadFileAsData( *gifData );
+
+            if( !result )
+            {
+                return;
+            }
+
+            loaded = loadGifImpl( gifData->getData(), gifData->getSize() );
         }
-
-        bool result = gifFile.loadFileAsData( *gifData );
-
-        if( !result )
+        catch( ... )
         {
-            return;
+            reset();
         }
-
-        GIF_Load(
-            gifData->getData(),             // Memory data source
-            (long)gifData->getSize(),       // size of gif data
-            GifModel::gifFrameCallback,     // the frame writer callback
-            nullptr,                        // pointer to metadata
-            this,                           // as void* data
-            0                               // skip frames
-        );
-
-        loaded = true;
     }
 
     GifModel::GifModel( juce::MemoryBlock& gif )
@@ -41,18 +39,16 @@ namespace rkoubou::GifSync
         width = 0;
         height = 0;
 
-        gifData = std::make_unique<juce::MemoryBlock>( gif );
+        try
+        {
+            gifData = std::make_unique<juce::MemoryBlock>( gif );
 
-        GIF_Load(
-            gifData->getData(),             // Memory data source
-            (long)gifData->getSize(),       // size of gif data
-            GifModel::gifFrameCallback,     // the frame writer callback
-            nullptr,                        // pointer to metadata
-            this,                           // as void* data
-            0                               // skip frames
-        );
-
-        loaded = true;
+            loaded = loadGifImpl( gifData->getData(), gifData->getSize() );
+        }
+        catch( ... )
+        {
+            reset();
+        }
     }
 
     GifModel::~GifModel() {}
@@ -99,7 +95,34 @@ namespace rkoubou::GifSync
         return gifData;
     }
 
+    void GifModel::reset()
+    {
+        loaded = false;
+        images.clear();
+        animationTime.clear();
+    }
+
 #pragma region Gif loading
+
+    bool GifModel::loadGifImpl( void* gifData, size_t gifSize )
+    {
+        long result = GIF_Load(
+            gifData,                        // Memory data source
+            (long)gifSize,                  // size of gif data
+            GifModel::gifFrameCallback,     // the frame writer callback
+            nullptr,                        // pointer to metadata
+            this,                           // as void* data
+            0                               // skip frames
+        );
+
+        if( result == 0 )
+        {
+            reset();
+            return false;
+        }
+
+        return true;
+    }
 
     void GifModel::gifFrameWriter( const GIF_WHDR& whdr )
     {

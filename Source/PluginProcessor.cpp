@@ -22,6 +22,11 @@ GifSyncAnimatorAudioProcessor::GifSyncAnimatorAudioProcessor()
                        )
 #endif
 {
+#if 0
+    juce::File logFile = juce::File::getSpecialLocation(juce::File::userDesktopDirectory).getChildFile("GifSyncAnimatorLog.txt");
+    juce::Logger::setCurrentLogger(new juce::FileLogger(logFile, "GifSyncAnimator Logger: ", 0));
+#endif
+
     context = new rkoubou::GifSync::Context( *this );
 }
 
@@ -183,12 +188,62 @@ void GifSyncAnimatorAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
+    juce::MemoryOutputStream stream( destData, true );
+
+    /*
+        bool              | gif data written flag
+        int64 (BigEndian) | gif size
+        void*             | gif data
+    */
+
+    if( !context->isLoaded() )
+    {
+        stream.writeBool( false ); // gif not loaded yet
+        return;
+    }
+
+    uint64_t size = context->getGifModel().getGifData()->getSize();
+    void* gifData = context->getGifModel().getGifData()->getData();
+
+    stream.writeBool( true ); // gif loaded
+    stream.writeInt64BigEndian( size );
+    stream.write( gifData, size );
 }
 
 void GifSyncAnimatorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    if( sizeInBytes <= 0 )
+    {
+        return;
+    }
+
+    juce::MemoryInputStream stream( data, sizeInBytes, false );
+
+    bool written = stream.readBool();
+
+    if( !written )
+    {
+        return;
+    }
+
+    uint64_t size = stream.readInt64BigEndian();
+
+    if( size == 0 )
+    {
+        return;
+    }
+
+    void* gif = new uint8_t[ size ];
+    auto readBytes = stream.read( gif, size );
+
+    juce::MemoryBlock gifData( gif, size );
+    delete[] gif;
+
+    context->loadGif( gifData );
 }
 
 //==============================================================================
