@@ -1,0 +1,19 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+[*.{c++,cc,cpp,cxx,h,h++,hh,hpp,hxx,inl,ipp,tlh,tli}]
+indent_size = 4
+
+cpp_space_before_function_open_parenthesis = remove
+cpp_space_after_keywords_in_control_flow_statements = false
+
+cpp_space_within_expression_parentheses = true
+cpp_space_within_parameter_list_parentheses = true
+cpp_space_within_control_flow_statement_parentheses = true
+cpp_space_within_square_brackets = true
