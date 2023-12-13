@@ -22,10 +22,12 @@ GifSyncAnimatorAudioProcessor::GifSyncAnimatorAudioProcessor()
                        )
 #endif
 {
+    context = new rkoubou::GifSync::Context( *this );
 }
 
 GifSyncAnimatorAudioProcessor::~GifSyncAnimatorAudioProcessor()
 {
+    delete context;
 }
 
 //==============================================================================
@@ -106,10 +108,11 @@ void GifSyncAnimatorAudioProcessor::releaseResources()
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool GifSyncAnimatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
+#if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
     return true;
-  #else
+#else
+#if 0
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
@@ -125,12 +128,16 @@ bool GifSyncAnimatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& l
    #endif
 
     return true;
-  #endif
+#else
+    return true;
+#endif
+#endif
 }
 #endif
 
 void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+#if 0
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -156,6 +163,7 @@ void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
         // ..do something to the data...
     }
+#endif
 }
 
 //==============================================================================
@@ -166,7 +174,7 @@ bool GifSyncAnimatorAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GifSyncAnimatorAudioProcessor::createEditor()
 {
-    return new GifSyncAnimatorAudioProcessorEditor (*this);
+    return new GifSyncAnimatorAudioProcessorEditor( *context );
 }
 
 //==============================================================================

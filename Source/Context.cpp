@@ -7,7 +7,13 @@ namespace rkoubou::GifSync
     {
     }
 
-    Context::~Context() {}
+    Context::~Context()
+    {}
+
+    juce::AudioProcessor& Context::getProcessor() const
+    {
+        return processor;
+    }
 
     GifModel& Context::getGifModel() const
     {

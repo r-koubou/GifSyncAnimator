@@ -10,15 +10,14 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor (GifSyncAnimatorAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor( rkoubou::GifSync::Context& ctx )
+    : AudioProcessorEditor( ctx.getProcessor() ), context( ctx )
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize( 400, 400 );
 
-    context = new rkoubou::GifSync::Context( p );
-    gifComponent = new rkoubou::GifSync::GifAnimationComponent( *context, *this );
+    gifComponent = new rkoubou::GifSync::GifAnimationComponent( context, *this );
 
     addAndMakeVisible( gifComponent );
 
@@ -28,7 +27,6 @@ GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor (GifSyn
 GifSyncAnimatorAudioProcessorEditor::~GifSyncAnimatorAudioProcessorEditor()
 {
     delete gifComponent;
-    delete context;
 }
 
 //==============================================================================

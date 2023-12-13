@@ -33,6 +33,7 @@ namespace rkoubou::GifSync
 
     public:
         GifModel( const juce::File& gifFile );
+        GifModel( juce::MemoryBlock& gif );
         ~GifModel();
 
         bool isLoaded() const noexcept;
@@ -44,10 +45,11 @@ namespace rkoubou::GifSync
         int getHeight() const noexcept;
         int getFrameCount() const noexcept;
 
+        std::unique_ptr<juce::MemoryBlock>& getGifData() noexcept;
+
     private:
 
 #pragma region Gif loading
-        void loadGif( const juce::File& gifFile );
         void gifFrameWriter( const GIF_WHDR& whdr );
         static void gifFrameCallback( void* data, struct GIF_WHDR* whdr );
 #pragma endregion

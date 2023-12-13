@@ -5,7 +5,54 @@ namespace rkoubou::GifSync
 
     GifModel::GifModel( const juce::File& gifFile )
     {
-        loadGif( gifFile );
+        loaded = false;
+        width = 0;
+        height = 0;
+
+        gifData = std::make_unique<juce::MemoryBlock>();
+
+        if( !gifFile.existsAsFile() )
+        {
+            return;
+        }
+
+        bool result = gifFile.loadFileAsData( *gifData );
+
+        if( !result )
+        {
+            return;
+        }
+
+        GIF_Load(
+            gifData->getData(),             // Memory data source
+            (long)gifData->getSize(),       // size of gif data
+            GifModel::gifFrameCallback,     // the frame writer callback
+            nullptr,                        // pointer to metadata
+            this,                           // as void* data
+            0                               // skip frames
+        );
+
+        loaded = true;
+    }
+
+    GifModel::GifModel( juce::MemoryBlock& gif )
+    {
+        loaded = false;
+        width = 0;
+        height = 0;
+
+        gifData = std::make_unique<juce::MemoryBlock>( gif );
+
+        GIF_Load(
+            gifData->getData(),             // Memory data source
+            (long)gifData->getSize(),       // size of gif data
+            GifModel::gifFrameCallback,     // the frame writer callback
+            nullptr,                        // pointer to metadata
+            this,                           // as void* data
+            0                               // skip frames
+        );
+
+        loaded = true;
     }
 
     GifModel::~GifModel() {}
@@ -17,7 +64,7 @@ namespace rkoubou::GifSync
 
     juce::Image& GifModel::getFrameImage( int index )
     {
-        return std::move( images[ index ] );
+        return images[ index ];
     }
 
     int GifModel::getFrameTime( int index )
@@ -47,36 +94,12 @@ namespace rkoubou::GifSync
         }
     }
 
-#pragma region Gif loading
-    void GifModel::loadGif( const juce::File& gifFile )
+    std::unique_ptr<juce::MemoryBlock>& GifModel::getGifData() noexcept
     {
-        loaded  = false;
-        width   = height = 0;
-        gifData = std::make_unique<juce::MemoryBlock>();
-
-        if( !gifFile.existsAsFile() )
-        {
-            return;
-        }
-
-        bool result = gifFile.loadFileAsData( *gifData );
-
-        if( !result )
-        {
-            return;
-        }
-
-        GIF_Load(
-            gifData->getData(),             // Memory data source
-            (long)gifData->getSize(),       // size of gif data
-            GifModel::gifFrameCallback,     // the frame writer callback
-            nullptr,                        // pointer to metadata
-            this,                           // as void* data
-            0                               // skip frames
-        );
-
-        loaded = true;
+        return gifData;
     }
+
+#pragma region Gif loading
 
     void GifModel::gifFrameWriter( const GIF_WHDR& whdr )
     {

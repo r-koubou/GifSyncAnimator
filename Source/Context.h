@@ -19,6 +19,8 @@ namespace rkoubou::GifSync
         Context( juce::AudioProcessor& processor );
         ~Context();
 
+        juce::AudioProcessor& getProcessor() const;
+
         GifModel& getGifModel() const;
         GifAnimator& getGifAnimator() const;
         void loadGif( const juce::File& file );
