@@ -82,31 +82,34 @@ namespace rkoubou::GifSync
             return;
         }
 
+        RenderingScale renderScale = context.getRenderingScale();
+        AnimationScale animationScale = context.getAnimationScale();
+
         juce::PopupMenu subMenuSpeed;
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleDefault, "Default", true );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleDefault, "Default", true,  animationScale == AnimationScale::Default );
         subMenuSpeed.addSeparator();
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster2x, "Faster 2x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster4x, "Faster 4x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster8x, "Faster 8x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster16x, "Faster 16x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster32x, "Faster 32x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster64x, "Faster 64x", true );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster2x, "Faster 2x", true, animationScale == AnimationScale::Faster2x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster4x, "Faster 4x", true, animationScale == AnimationScale::Faster4x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster8x, "Faster 8x", true, animationScale == AnimationScale::Faster8x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster16x, "Faster 16x", true, animationScale == AnimationScale::Faster16x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster32x, "Faster 32x", true, animationScale == AnimationScale::Faster32x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleFaster64x, "Faster 64x", true, animationScale == AnimationScale::Faster64x );
         subMenuSpeed.addSeparator();
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower2x, "Slower 2x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower4x, "Slower 4x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower8x, "Slower 8x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower16x, "Slower 16x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower32x, "Slower 32x", true );
-        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower64x, "Slower 64x", true );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower2x, "Slower 2x", true, animationScale == AnimationScale::Slower2x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower4x, "Slower 4x", true, animationScale == AnimationScale::Slower4x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower8x, "Slower 8x", true, animationScale == AnimationScale::Slower8x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower16x, "Slower 16x", true, animationScale == AnimationScale::Slower16x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower32x, "Slower 32x", true, animationScale == AnimationScale::Slower32x );
+        subMenuSpeed.addItem( (int)PopupMenuIds::AnimationScaleSlower64x, "Slower 64x", true, animationScale == AnimationScale::Slower64x );
 
         juce::PopupMenu subMenuGuiScale;
-        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScaleDefault, "Default", true );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScaleDefault, "Default", true, renderScale == RenderingScale::Default );
         subMenuGuiScale.addSeparator();
-        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale50, "50%", true );
-        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale75, "75%", true );
-        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale125, "125%", true );
-        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale150, "150%", true );
-        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale200, "200%", true );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale50, "50%", true, renderScale == RenderingScale::Scale50 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale75, "75%", true, renderScale == RenderingScale::Scale75 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale125, "125%", true, renderScale == RenderingScale::Scale125 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale150, "150%", true, renderScale == RenderingScale::Scale150 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale200, "200%", true, renderScale == RenderingScale::Scale200 );
 
         juce::PopupMenu menu;
         menu.addSubMenu( "Animation Speed", subMenuSpeed );
