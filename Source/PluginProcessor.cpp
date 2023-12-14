@@ -190,25 +190,7 @@ void GifSyncAnimatorAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     // as intermediaries to make it easy to save and load complex data.
 
     juce::MemoryOutputStream stream( destData, true );
-
-    /*
-        bool              | gif data written flag
-        int64 (BigEndian) | gif size
-        void*             | gif data
-    */
-
-    if( !context->isLoaded() )
-    {
-        stream.writeBool( false ); // gif not loaded yet
-        return;
-    }
-
-    uint64_t size = context->getGifModel().getGifData()->getSize();
-    void* gifData = context->getGifModel().getGifData()->getData();
-
-    stream.writeBool( true ); // gif loaded
-    stream.writeInt64BigEndian( size );
-    stream.write( gifData, size );
+    context->saveState( stream );
 }
 
 void GifSyncAnimatorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
@@ -222,28 +204,7 @@ void GifSyncAnimatorAudioProcessor::setStateInformation (const void* data, int s
     }
 
     juce::MemoryInputStream stream( data, sizeInBytes, false );
-
-    bool written = stream.readBool();
-
-    if( !written )
-    {
-        return;
-    }
-
-    uint64_t size = stream.readInt64BigEndian();
-
-    if( size == 0 )
-    {
-        return;
-    }
-
-    void* gif = new uint8_t[ size ];
-    auto readBytes = stream.read( gif, size );
-
-    juce::MemoryBlock gifData( gif, size );
-    delete[] gif;
-
-    context->loadGif( gifData );
+    context->loadState( stream );
 }
 
 //==============================================================================

@@ -39,5 +39,8 @@ namespace rkoubou::GifSync
 
         RenderingScale getRenderingScale() const override;
         void setRenderingScale( RenderingScale scale ) override;
+
+        void saveState( juce::OutputStream& stream ) const;
+        void loadState( juce::InputStream& stream );
     };
 }

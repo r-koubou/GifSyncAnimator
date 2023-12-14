@@ -65,4 +65,51 @@ namespace rkoubou::GifSync
     {
         renderingScale = scale;
     }
+
+    void Context::saveState( juce::OutputStream& stream ) const
+    {
+        /*
+            bool              | gif data written flag
+            int64 (BigEndian) | gif size
+            void*             | gif data
+        */
+
+        if( !isLoaded() )
+        {
+            stream.writeBool( false ); // gif not loaded yet
+            return;
+        }
+
+        uint64_t size = getGifModel().getGifData()->getSize();
+        void* gifData = getGifModel().getGifData()->getData();
+
+        stream.writeBool( true ); // gif loaded
+        stream.writeInt64BigEndian( size );
+        stream.write( gifData, size );
+    }
+
+    void Context::loadState( juce::InputStream & stream )
+    {
+        bool written = stream.readBool();
+
+        if( !written )
+        {
+            return;
+        }
+
+        uint64_t size = stream.readInt64BigEndian();
+
+        if( size == 0 )
+        {
+            return;
+        }
+
+        void* gif = new uint8_t[ size ];
+        auto readBytes = stream.read( gif, size );
+
+        juce::MemoryBlock gifData( gif, size );
+        delete[] gif;
+
+        loadGif( gifData );
+    }
 }
