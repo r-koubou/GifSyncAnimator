@@ -27,6 +27,8 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    rkoubou::GifSync::GifAnimationComponent& getGifComponent();
+
 private:
     rkoubou::GifSync::Context& context;
     rkoubou::GifSync::GifAnimationComponent* gifComponent;

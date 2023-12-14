@@ -66,50 +66,94 @@ namespace rkoubou::GifSync
         renderingScale = scale;
     }
 
+#pragma region Save & Load state
+
+static const char SIGNATURE[2] = {'G', 'S'};
+#define VERSION                 1
+
+#define JSON_VERSION            "version"
+#define JSON_ANIMATION_SCALE    "animationScale"
+#define JSON_RENDERING_SCALE    "renderingScale"
+#define JSON_GIF_DATA           "gifdata"
+
+/*
+    [0..1] signature ('GS')
+    [2..*] json
+
+json:
+    {
+        "version": 1,
+        "animationScale": 1,
+        "renderingScale": 1,
+        "gifdata": "<Base64 Encoded>..."
+    }
+*/
+
     void Context::saveState( juce::OutputStream& stream ) const
     {
-        /*
-            bool              | gif data written flag
-            int64 (BigEndian) | gif size
-            void*             | gif data
-        */
+        juce::DynamicObject::Ptr json = new juce::DynamicObject();
 
-        if( !isLoaded() )
+        json->setProperty( JSON_VERSION, 1 );
+        json->setProperty( JSON_ANIMATION_SCALE, static_cast<int>( animationScale ) );
+        json->setProperty( JSON_RENDERING_SCALE, static_cast<int>( renderingScale ) );
+
+        juce::Logger::writeToLog( "save: animationScale: " + juce::String( static_cast<int>( animationScale ) ) );
+        juce::Logger::writeToLog( "save: renderingScale: " + juce::String( static_cast<int>( renderingScale ) ) );
+
+        if( isLoaded() )
         {
-            stream.writeBool( false ); // gif not loaded yet
-            return;
+            juce::MemoryBlock& gif = gifModel->getGifData();
+            json->setProperty( JSON_GIF_DATA, gif.toBase64Encoding() );
+        }
+        else
+        {
+            json->setProperty( JSON_GIF_DATA, juce::var() );
         }
 
-        uint64_t size = getGifModel().getGifData()->getSize();
-        void* gifData = getGifModel().getGifData()->getData();
+        stream.write( SIGNATURE, 2 );
 
-        stream.writeBool( true ); // gif loaded
-        stream.writeInt64BigEndian( size );
-        stream.write( gifData, size );
+        juce::String jsonString = juce::JSON::toString( juce::var( json.get() ), true );
+        stream.write( jsonString.toRawUTF8(), jsonString.getNumBytesAsUTF8() );
     }
 
     void Context::loadState( juce::InputStream & stream )
     {
-        bool written = stream.readBool();
+        char signature[ 2 ];
+        stream.read( signature, 2 );
 
-        if( !written )
+        if( signature[ 0 ] != SIGNATURE[ 0 ] ||
+            signature[ 1 ] != SIGNATURE[ 1 ] )
         {
             return;
         }
 
-        uint64_t size = stream.readInt64BigEndian();
+        juce::DynamicObject::Ptr json = juce::JSON::parse( stream ).getDynamicObject();
 
-        if( size == 0 )
+        int version = json->getProperty( JSON_VERSION );
+        if( version != VERSION )
         {
             return;
         }
 
-        void* gif = new uint8_t[ size ];
-        auto readBytes = stream.read( gif, size );
+        animationScale = static_cast<AnimationScale>( static_cast<int>( json->getProperty( JSON_ANIMATION_SCALE ) ) );
+        renderingScale = static_cast<RenderingScale>( static_cast<int>( json->getProperty( JSON_RENDERING_SCALE ) ) );
 
-        juce::MemoryBlock gifData( gif, size );
-        delete[] gif;
+        juce::Logger::writeToLog( "load: animationScale: " + juce::String( static_cast<int>( animationScale ) ) );
+        juce::Logger::writeToLog( ":oad: renderingScale: " + juce::String( static_cast<int>( renderingScale ) ) );
 
+        juce::var gif = json->getProperty( JSON_GIF_DATA );
+
+        if( gif.isVoid() )
+        {
+            return;
+        }
+
+        juce::String gifBase64 = gif.toString();
+        juce::MemoryBlock gifData = juce::MemoryBlock();
+
+        gifData.fromBase64Encoding( gifBase64 );
         loadGif( gifData );
     }
+#pragma endregion
+
 }

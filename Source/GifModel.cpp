@@ -90,9 +90,9 @@ namespace rkoubou::GifSync
         }
     }
 
-    std::unique_ptr<juce::MemoryBlock>& GifModel::getGifData() noexcept
+    juce::MemoryBlock& GifModel::getGifData() noexcept
     {
-        return gifData;
+        return *gifData;
     }
 
     void GifModel::reset()

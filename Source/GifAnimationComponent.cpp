@@ -118,6 +118,29 @@ namespace rkoubou::GifSync
         });
     }
 
+    void GifAnimationComponent::setRenderingScale( RenderingScale scale )
+    {
+        auto factor = 1.0;
+
+        switch( scale )
+        {
+            case RenderingScale::Scale50: factor = 0.5; break;
+            case RenderingScale::Scale75: factor = 0.75; break;
+            case RenderingScale::Scale125: factor = 1.25; break;
+            case RenderingScale::Scale150: factor = 1.5; break;
+            case RenderingScale::Scale200: factor = 2.0; break;
+            default:
+                break;
+        }
+
+        int w = (int)( (double)context.getGifModel().getWidth() * factor );
+        int h = (int)( (double)context.getGifModel().getHeight() * factor );
+        setSize( w, h );
+        editor.setSize( w, h );
+
+        context.setRenderingScale( scale );
+    }
+
     void GifAnimationComponent::handlePopupMenu( PopupMenuIds id )
     {
 #pragma region AnimationScale
@@ -149,22 +172,20 @@ namespace rkoubou::GifSync
 
         if( id > PopupMenuIds::GuiScaleBegin && id < PopupMenuIds::GuiScaleEnd )
         {
-            auto factor = 1.0;
+            RenderingScale scale = RenderingScale::Default;
+
             switch( id )
             {
-                case PopupMenuIds::GuiScale50: factor = 0.5; break;
-                case PopupMenuIds::GuiScale75: factor = 0.75; break;
-                case PopupMenuIds::GuiScale125: factor = 1.25; break;
-                case PopupMenuIds::GuiScale150: factor = 1.5; break;
-                case PopupMenuIds::GuiScale200: factor = 2.0; break;
+                case PopupMenuIds::GuiScale50: scale = RenderingScale::Scale50; break;
+                case PopupMenuIds::GuiScale75: scale = RenderingScale::Scale75; break;
+                case PopupMenuIds::GuiScale125: scale = RenderingScale::Scale125; break;
+                case PopupMenuIds::GuiScale150: scale = RenderingScale::Scale150; break;
+                case PopupMenuIds::GuiScale200: scale = RenderingScale::Scale200; break;
                 default:
                     break;
             }
 
-            int w = (int)( (double)context.getGifModel().getWidth() * factor );
-            int h = (int)( (double)context.getGifModel().getHeight() * factor );
-            setSize( w, h );
-            editor.setSize( w, h );
+            setRenderingScale( scale );
         }
     }
 

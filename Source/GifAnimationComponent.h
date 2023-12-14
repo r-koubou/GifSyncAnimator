@@ -53,6 +53,8 @@ namespace rkoubou::GifSync
         void timerCallback() override;
         void mouseDown( const juce::MouseEvent& event ) override;
 
+        void setRenderingScale( RenderingScale scale );
+
     private:
         void handlePopupMenu( PopupMenuIds id );
         void processFrame();

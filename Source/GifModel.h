@@ -45,7 +45,7 @@ namespace rkoubou::GifSync
         int getHeight() const noexcept;
         int getFrameCount() const noexcept;
 
-        std::unique_ptr<juce::MemoryBlock>& getGifData() noexcept;
+        juce::MemoryBlock& getGifData() noexcept;
 
     private:
         void reset();

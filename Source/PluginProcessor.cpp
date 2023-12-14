@@ -22,7 +22,7 @@ GifSyncAnimatorAudioProcessor::GifSyncAnimatorAudioProcessor()
                        )
 #endif
 {
-#if 0
+#if DEBUG && 0
     juce::File logFile = juce::File::getSpecialLocation(juce::File::userDesktopDirectory).getChildFile("GifSyncAnimatorLog.txt");
     juce::Logger::setCurrentLogger(new juce::FileLogger(logFile, "GifSyncAnimator Logger: ", 0));
 #endif
