@@ -1,6 +1,7 @@
 #pragma once
 #include <JuceHeader.h>
 
+#include "IContextAccessor.h"
 #include "Context.h"
 
 namespace rkoubou::GifSync
@@ -42,7 +43,7 @@ namespace rkoubou::GifSync
         Context& context;
         juce::AudioProcessorEditor& editor;
         std::unique_ptr<juce::FileChooser> fileChooser;
-        bool loading = false;
+        bool loading;
 
     public:
         GifAnimationComponent( Context& context, juce::AudioProcessorEditor& editor );

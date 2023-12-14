@@ -2,8 +2,10 @@
 
 namespace rkoubou::GifSync
 {
-    GifAnimationComponent::GifAnimationComponent( Context& context, juce::AudioProcessorEditor& editor )
-        : context( context ), editor( editor )
+    GifAnimationComponent::GifAnimationComponent( Context& context, juce::AudioProcessorEditor& editor ) :
+        context( context ),
+        editor( editor ),
+        loading( false )
     {
         setBufferedToImage( true );
         setSize( editor.getWidth(), editor.getHeight() );
@@ -140,7 +142,7 @@ namespace rkoubou::GifSync
                 default:
                     break;
             }
-            context.getGifAnimator().setAnimationScale( scale );
+            context.setAnimationScale( scale );
             return;
         }
 #pragma endregion
