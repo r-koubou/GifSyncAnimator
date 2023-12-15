@@ -1,0 +1,57 @@
+name: build
+
+env:
+  PREFIX: GifSyncAnimator
+  BUILD_DIR: __build
+
+on:
+  workflow_call:
+    inputs:
+      build-platform:
+        required: false
+        type: string
+        default: "Windows"
+      build-configuration:
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      build-platform:
+        description: "Target Platform"
+        required: false
+        type: string
+        default: "Windows"
+      build-configuration:
+        description: "Build configuration"
+        required: true
+        type: choice
+        options:
+          - Debug
+          - Release
+
+jobs:
+  #--------------------------------------------------------------
+  # Windows
+  #--------------------------------------------------------------
+  windows-build:
+    if: contains(inputs.build-platform, 'Windows')
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: CMake Create Buildsystem
+      run: cmake -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
+      shell: cmd
+
+    - name: CMake Build
+      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
+      shell: cmd
+
+    - name: Artifact Windows
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.PREFIX }}-${{ inputs.build-configuration }}${{ inputs.custom-suffix }}-${{ github.sha }}
+        path: ${{ env.BUILD_DIR }}/GifSyncAnimator_artefacts/${{ inputs.build-configuration }}/VST3/*
