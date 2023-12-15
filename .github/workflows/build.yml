@@ -62,4 +62,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}${{ inputs.custom-suffix }}-${{ github.sha }}
-        path: ${{ env.BUILD_DIR }}/GifSyncAnimator_artefacts/${{ inputs.build-configuration }}/VST3/*
+        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
