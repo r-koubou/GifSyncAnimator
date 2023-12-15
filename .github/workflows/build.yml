@@ -3,6 +3,7 @@ name: build
 env:
   PREFIX: GifSyncAnimator
   BUILD_DIR: __build
+  JUCE_GIT_USE_TAGNAME: 7.0.9
 
 on:
   workflow_call:
@@ -41,6 +42,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+
+    - name: Checkout JUCE Submodule
+      run: |
+        cd libs\JUCE
+        git submodule update --init
+        git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
+      shell: cmd
 
     - name: CMake Create Buildsystem
       run: cmake -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
