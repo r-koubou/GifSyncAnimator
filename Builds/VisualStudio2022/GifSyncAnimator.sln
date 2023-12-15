@@ -1,27 +1,21 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.8.34330.188
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator_StandalonePlugin", "GifSyncAnimator_StandalonePlugin.vcxproj", "{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}"
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator - Standalone Plugin", "GifSyncAnimator_StandalonePlugin.vcxproj", "{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{17F92F08-5E5E-D3C4-26BD-49E50A8E5515} = {17F92F08-5E5E-D3C4-26BD-49E50A8E5515}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator_VST3", "GifSyncAnimator_VST3.vcxproj", "{B3061F8F-E4CF-186F-5E0E-56DA7BD30045}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator - VST3", "GifSyncAnimator_VST3.vcxproj", "{B3061F8F-E4CF-186F-5E0E-56DA7BD30045}"
 	ProjectSection(ProjectDependencies) = postProject
 		{17F92F08-5E5E-D3C4-26BD-49E50A8E5515} = {17F92F08-5E5E-D3C4-26BD-49E50A8E5515}
 		{E0FA2D98-DD4A-BC38-DEFE-C80014F13891} = {E0FA2D98-DD4A-BC38-DEFE-C80014F13891}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator_SharedCode", "GifSyncAnimator_SharedCode.vcxproj", "{17F92F08-5E5E-D3C4-26BD-49E50A8E5515}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator - Shared Code", "GifSyncAnimator_SharedCode.vcxproj", "{17F92F08-5E5E-D3C4-26BD-49E50A8E5515}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator_VST3ManifestHelper", "GifSyncAnimator_VST3ManifestHelper.vcxproj", "{E0FA2D98-DD4A-BC38-DEFE-C80014F13891}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{67553064-30AE-4AEB-887D-C658A1C5F774}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\.editorconfig = ..\..\.editorconfig
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GifSyncAnimator - VST3 Manifest Helper", "GifSyncAnimator_VST3ManifestHelper.vcxproj", "{E0FA2D98-DD4A-BC38-DEFE-C80014F13891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,14 +23,14 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Debug|x64.ActiveCfg = Debug|x64
-		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Debug|x64.Build.0 = Debug|x64
-		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Release|x64.ActiveCfg = Release|x64
-		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Release|x64.Build.0 = Release|x64
 		{B3061F8F-E4CF-186F-5E0E-56DA7BD30045}.Debug|x64.ActiveCfg = Debug|x64
 		{B3061F8F-E4CF-186F-5E0E-56DA7BD30045}.Debug|x64.Build.0 = Debug|x64
 		{B3061F8F-E4CF-186F-5E0E-56DA7BD30045}.Release|x64.ActiveCfg = Release|x64
 		{B3061F8F-E4CF-186F-5E0E-56DA7BD30045}.Release|x64.Build.0 = Release|x64
+		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Debug|x64.ActiveCfg = Debug|x64
+		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Debug|x64.Build.0 = Debug|x64
+		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Release|x64.ActiveCfg = Release|x64
+		{9EE37774-B23C-D29D-7E84-E8322F9BF7F5}.Release|x64.Build.0 = Release|x64
 		{17F92F08-5E5E-D3C4-26BD-49E50A8E5515}.Debug|x64.ActiveCfg = Debug|x64
 		{17F92F08-5E5E-D3C4-26BD-49E50A8E5515}.Debug|x64.Build.0 = Debug|x64
 		{17F92F08-5E5E-D3C4-26BD-49E50A8E5515}.Release|x64.ActiveCfg = Release|x64

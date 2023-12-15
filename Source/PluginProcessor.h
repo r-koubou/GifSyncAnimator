@@ -10,6 +10,8 @@
 
 #include <JuceHeader.h>
 
+#include "Context.h"
+
 //==============================================================================
 /**
 */
@@ -55,5 +57,7 @@ public:
 
 private:
     //==============================================================================
+    rkoubou::GifSync::Context *context;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GifSyncAnimatorAudioProcessor)
 };

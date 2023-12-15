@@ -2,7 +2,8 @@
 
 namespace rkoubou::GifSync
 {
-    GifAnimator::GifAnimator( juce::AudioProcessor& processor, GifModel& model ):
+    GifAnimator::GifAnimator( IContextAccessor& ctx, juce::AudioProcessor& processor, GifModel& model ) :
+        context( ctx ),
         processor( processor ),
         model( model )
     {
@@ -47,7 +48,7 @@ namespace rkoubou::GifSync
 
         double factor = 100; // 1x == 100%
 
-        switch( animationScale )
+        switch( context.getAnimationScale() )
         {
             case AnimationScale::Default:
                 break;
@@ -95,16 +96,6 @@ namespace rkoubou::GifSync
         int newFrame = ( ( frameSize * pos ) / 100 ) % frameSize;
 
         return newFrame;
-    }
-
-    void GifSync::GifAnimator::setAnimationScale( AnimationScale scale )
-    {
-        animationScale = scale;
-    }
-
-    AnimationScale GifSync::GifAnimator::getAnimationScale() const
-    {
-        return animationScale;
     }
 
     uint32_t GifSync::GifAnimator::getCurrentFrame() const

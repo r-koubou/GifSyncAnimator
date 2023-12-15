@@ -10,17 +10,20 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor (GifSyncAnimatorAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor( rkoubou::GifSync::Context& ctx )
+    : AudioProcessorEditor( ctx.getProcessor() ), context( ctx )
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     setSize( 400, 400 );
 
-    context = new rkoubou::GifSync::Context( p );
-    gifComponent = new rkoubou::GifSync::GifAnimationComponent( *context, *this );
+    gifComponent = new rkoubou::GifSync::GifAnimationComponent( context, *this );
 
     addAndMakeVisible( gifComponent );
+
+    if( context.isLoaded() )
+    {
+        juce::Logger::writeToLog( "GifSyncAnimatorAudioProcessorEditor() : scale = " + juce::String( (int)context.getRenderingScale() ) );
+        gifComponent->setRenderingScale( context.getRenderingScale() );
+    }
 
     gifComponent->startTimer( 1 );
 }
@@ -28,7 +31,6 @@ GifSyncAnimatorAudioProcessorEditor::GifSyncAnimatorAudioProcessorEditor (GifSyn
 GifSyncAnimatorAudioProcessorEditor::~GifSyncAnimatorAudioProcessorEditor()
 {
     delete gifComponent;
-    delete context;
 }
 
 //==============================================================================
@@ -46,4 +48,9 @@ void GifSyncAnimatorAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+}
+
+rkoubou::GifSync::GifAnimationComponent& GifSyncAnimatorAudioProcessorEditor::getGifComponent()
+{
+    return *gifComponent;
 }

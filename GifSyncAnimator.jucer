@@ -6,6 +6,25 @@
               pluginVST3Category="Tools">
   <MAINGROUP id="BGDj7P" name="GifSyncAnimator">
     <GROUP id="{165C360A-E7F1-07BD-D627-DFB9073DAEFC}" name="Source">
+      <GROUP id="{2E84E495-EAEC-751C-E29F-F1D5F9B0B3F6}" name="GifSyncAnimator">
+        <FILE id="HiOX0b" name="AnimationScale.h" compile="0" resource="0"
+              file="Source/AnimationScale.h"/>
+        <FILE id="ALqxm9" name="Context.cpp" compile="1" resource="0" file="Source/Context.cpp"/>
+        <FILE id="EiBLCN" name="Context.h" compile="0" resource="0" file="Source/Context.h"/>
+        <FILE id="C2TQD5" name="gif_load.h" compile="0" resource="0" file="Source/gif_load.h"/>
+        <FILE id="SYMShT" name="GifAnimationComponent.cpp" compile="1" resource="0"
+              file="Source/GifAnimationComponent.cpp"/>
+        <FILE id="MRzJav" name="GifAnimationComponent.h" compile="0" resource="0"
+              file="Source/GifAnimationComponent.h"/>
+        <FILE id="MBYpJI" name="GifAnimator.cpp" compile="1" resource="0" file="Source/GifAnimator.cpp"/>
+        <FILE id="EtXHrk" name="GifAnimator.h" compile="0" resource="0" file="Source/GifAnimator.h"/>
+        <FILE id="XbVlH1" name="GifModel.cpp" compile="1" resource="0" file="Source/GifModel.cpp"/>
+        <FILE id="nVyJ1l" name="GifModel.h" compile="0" resource="0" file="Source/GifModel.h"/>
+        <FILE id="tuYJjr" name="IContextAccessor.h" compile="0" resource="0"
+              file="Source/IContextAccessor.h"/>
+        <FILE id="EYbvfz" name="RenderingScale.h" compile="0" resource="0"
+              file="Source/RenderingScale.h"/>
+      </GROUP>
       <FILE id="UeDRdF" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="e5yApN" name="PluginProcessor.h" compile="0" resource="0"

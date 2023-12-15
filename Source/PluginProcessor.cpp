@@ -22,10 +22,17 @@ GifSyncAnimatorAudioProcessor::GifSyncAnimatorAudioProcessor()
                        )
 #endif
 {
+#if DEBUG && 0
+    juce::File logFile = juce::File::getSpecialLocation(juce::File::userDesktopDirectory).getChildFile("GifSyncAnimatorLog.txt");
+    juce::Logger::setCurrentLogger(new juce::FileLogger(logFile, "GifSyncAnimator Logger: ", 0));
+#endif
+
+    context = new rkoubou::GifSync::Context( *this );
 }
 
 GifSyncAnimatorAudioProcessor::~GifSyncAnimatorAudioProcessor()
 {
+    delete context;
 }
 
 //==============================================================================
@@ -106,10 +113,11 @@ void GifSyncAnimatorAudioProcessor::releaseResources()
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool GifSyncAnimatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
+#if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
     return true;
-  #else
+#else
+#if 0
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
@@ -125,12 +133,16 @@ bool GifSyncAnimatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& l
    #endif
 
     return true;
-  #endif
+#else
+    return true;
+#endif
+#endif
 }
 #endif
 
 void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+#if 0
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -156,6 +168,7 @@ void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 
         // ..do something to the data...
     }
+#endif
 }
 
 //==============================================================================
@@ -166,7 +179,7 @@ bool GifSyncAnimatorAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GifSyncAnimatorAudioProcessor::createEditor()
 {
-    return new GifSyncAnimatorAudioProcessorEditor (*this);
+    return new GifSyncAnimatorAudioProcessorEditor( *context );
 }
 
 //==============================================================================
@@ -175,12 +188,23 @@ void GifSyncAnimatorAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
+    juce::MemoryOutputStream stream( destData, true );
+    context->saveState( stream );
 }
 
 void GifSyncAnimatorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    if( sizeInBytes <= 0 )
+    {
+        return;
+    }
+
+    juce::MemoryInputStream stream( data, sizeInBytes, false );
+    context->loadState( stream );
 }
 
 //==============================================================================
