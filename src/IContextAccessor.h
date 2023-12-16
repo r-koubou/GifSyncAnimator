@@ -7,8 +7,10 @@
 
 namespace rkoubou::GifSync
 {
-    __interface IContextAccessor
+    class IContextAccessor
     {
+    public:
+        virtual ~IContextAccessor() = default;
     public:
         virtual AnimationScale getAnimationScale() const = 0;
         virtual void setAnimationScale( AnimationScale scale ) = 0;
