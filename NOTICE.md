@@ -3,8 +3,9 @@ NOTICE
 
 ## Trademark Notice
 
-- VST is a registered trademark of Steinberg Media Technologies GmbH
+- AAX is a trademark of Avid Technology
 - Audio Unit is a trademark of Apple Inc.
+- VST is a registered trademark of Steinberg Media Technologies GmbH
 
 ----
 
