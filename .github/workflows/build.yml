@@ -15,6 +15,9 @@ on:
       build-configuration:
         required: true
         type: string
+      custom-suffix:
+        required: false
+        type: string
 
   workflow_dispatch:
     inputs:
@@ -22,7 +25,7 @@ on:
         description: "Target Platform"
         required: false
         type: string
-        default: "Windows"
+        default: "Windows, Mac"
       build-configuration:
         description: "Build configuration"
         required: true
@@ -30,7 +33,11 @@ on:
         options:
           - Debug
           - Release
-
+      custom-suffix:
+        description: "Custom suffix for artifact name"
+        required: false
+        type: string
+        default: ""
 jobs:
   #--------------------------------------------------------------
   # Windows
@@ -63,3 +70,41 @@ jobs:
       with:
         name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}${{ inputs.custom-suffix }}-${{ github.sha }}
         path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+
+  #--------------------------------------------------------------
+  # Mac
+  #--------------------------------------------------------------
+  mac-build:
+    if: contains(inputs.build-platform, 'Mac')
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Checkout JUCE Submodule
+      run: |
+        cd libs\JUCE
+        git submodule update --init
+        git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
+      shell: cmd
+
+    - name: CMake Create Buildsystem
+      run: cmake -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
+      shell: cmd
+
+    - name: CMake Build
+      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
+      shell: cmd
+
+    - name: Artifact Mac AU
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-AU${{ inputs.custom-suffix }}-${{ github.sha }}
+        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/AU/*
+
+    - name: Artifact Mac VST
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST${{ inputs.custom-suffix }}-${{ github.sha }}
+        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/VST3/*
