@@ -100,11 +100,11 @@ jobs:
     - name: Artifact Mac AU
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-AU${{ inputs.custom-suffix }}-${{ github.sha }}
+        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU${{ inputs.custom-suffix }}-${{ github.sha }}
         path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/AU/*
 
     - name: Artifact Mac VST
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST${{ inputs.custom-suffix }}-${{ github.sha }}
+        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST${{ inputs.custom-suffix }}-${{ github.sha }}
         path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/VST3/*
