@@ -115,6 +115,8 @@ void GifSyncAnimatorAudioProcessor::prepareToPlay (double sampleRate, int sample
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    this->sampleRate = sampleRate;
+    this->currentPpqPosition = 0.0;
 }
 
 void GifSyncAnimatorAudioProcessor::releaseResources()
@@ -182,6 +184,29 @@ void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         // ..do something to the data...
     }
 #endif
+
+    int numSamples = buffer.getNumSamples(); // バッファサイズを取得
+
+    // テンポやループ、ジャンプなどのイベントをチェック
+    // （例：MIDIメッセージからテンポ変更を検出する）
+    for( const auto metadata : midiMessages )
+    {
+        auto message = metadata.getMessage();
+        if( message.isTempoMetaEvent() )
+        {
+            double secondsPerQuarterNote = message.getTempoSecondsPerQuarterNote();
+            this->tempoInBpm = 60.0 / secondsPerQuarterNote;
+        }
+    }
+
+    // 再生位置（PPQ）を更新
+    double ppqPerSample = 1.0 / (sampleRate / 60.0 / tempoInBpm / 4.0);
+    this->currentPpqPosition += numSamples * ppqPerSample;
+
+    if( context->isLoaded() )
+    {
+        context->getGifAnimator().process( currentPpqPosition );
+    }
 }
 
 //==============================================================================

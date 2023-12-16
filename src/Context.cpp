@@ -26,7 +26,8 @@ namespace rkoubou::GifSync
     Context::Context( juce::AudioProcessor& processor ) :
         processor( processor ),
         animationScale( AnimationScale::Default ),
-        renderingScale( RenderingScale::Default )
+        renderingScale( RenderingScale::Default ),
+        playHeadAvailable( processor.getPlayHead() != nullptr )
     {
     }
 
@@ -65,6 +66,11 @@ namespace rkoubou::GifSync
     bool Context::isLoaded() const
     {
         return loaded;
+    }
+
+    bool Context::isPlayHeadAvailable() const
+    {
+        return playHeadAvailable;
     }
 
     AnimationScale Context::getAnimationScale() const

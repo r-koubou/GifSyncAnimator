@@ -71,6 +71,9 @@ public:
 private:
     //==============================================================================
     rkoubou::GifSync::Context *context;
+    double sampleRate = 0.0;
+    double currentPpqPosition = 0.0;
+    double tempoInBpm = 0.0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GifSyncAnimatorAudioProcessor)
 };

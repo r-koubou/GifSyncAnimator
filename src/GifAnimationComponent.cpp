@@ -222,8 +222,22 @@ namespace rkoubou::GifSync
         }
 
         repaint();
-        int time = context.getGifAnimator().process();
-        startTimer( time );
-    }
 
+        if( context.isPlayHeadAvailable() )
+        {
+            juce::AudioPlayHead::CurrentPositionInfo positionInfo;
+            if( auto* playHead = context.getProcessor().getPlayHead() )
+            {
+                playHead->getCurrentPosition( positionInfo );
+                if( positionInfo.isPlaying )
+                {
+                    int time = context.getGifAnimator().process( positionInfo.ppqPosition );
+                    startTimer( time );
+                    return;
+                }
+            }
+        }
+
+        startTimer( 30 );
+    }
 }

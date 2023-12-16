@@ -33,7 +33,7 @@ namespace rkoubou::GifSync
     GifAnimator::~GifAnimator()
     {}
 
-    int GifAnimator::process()
+    int GifAnimator::process( double ppq )
     {
         if( !model.isLoaded() || model.getFrameCount() == 0 )
         {
