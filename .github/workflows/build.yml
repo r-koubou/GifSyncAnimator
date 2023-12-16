@@ -84,18 +84,18 @@ jobs:
 
     - name: Checkout JUCE Submodule
       run: |
-        cd libs\JUCE
+        cd libs/JUCE
         git submodule update --init
         git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
-      shell: cmd
+      shell: bash
 
     - name: CMake Create Buildsystem
       run: cmake -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
-      shell: cmd
+      shell: bash
 
     - name: CMake Build
       run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
-      shell: cmd
+      shell: bash
 
     - name: Artifact Mac AU
       uses: actions/upload-artifact@v3
