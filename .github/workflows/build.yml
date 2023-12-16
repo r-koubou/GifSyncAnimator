@@ -68,7 +68,7 @@ jobs:
     - name: Artifact Windows
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}${{ inputs.custom-suffix }}-${{ github.sha }}
+        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST3${{ inputs.custom-suffix }}-${{ github.sha }}
         path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
 
   #--------------------------------------------------------------
@@ -106,5 +106,5 @@ jobs:
     - name: Artifact Mac VST
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST${{ inputs.custom-suffix }}-${{ github.sha }}
+        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST3${{ inputs.custom-suffix }}-${{ github.sha }}
         path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/VST3/*
