@@ -1,9 +1,12 @@
 name: build
 
 env:
+  # Contants
   PREFIX: GifSyncAnimator
-  BUILD_DIR: __build
+  CMAKE_BUILD_DIR: __build
   JUCE_GIT_USE_TAGNAME: 7.0.9
+  # Variables
+  artifact_suffix: ""
 
 on:
   workflow_call:
@@ -15,9 +18,12 @@ on:
       build-configuration:
         required: true
         type: string
-      custom-suffix:
+      version:
         required: false
         type: string
+      append-sha-to-artifact:
+        required: false
+        type: boolean
 
   workflow_dispatch:
     inputs:
@@ -33,11 +39,16 @@ on:
         options:
           - Debug
           - Release
-      custom-suffix:
-        description: "Custom suffix for artifact name"
+      version:
+        description: "Version. Semantical versioning is recommended"
         required: false
         type: string
         default: ""
+      append-sha-to-artifact:
+        description: "Append SHA to artifact name"
+        required: false
+        type: boolean
+        default: false
 jobs:
   #--------------------------------------------------------------
   # Windows
@@ -49,27 +60,46 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout JUCE Submodule
+      shell: cmd
       run: |
         cd libs\JUCE
-        git submodule update --init
         git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
-      shell: cmd
 
     - name: CMake Create Buildsystem
-      run: cmake -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
       shell: cmd
+      run: cmake -B ${{ env.CMAKE_BUILD_DIR }} -A x64 -G "Visual Studio 17 2022" ${{ github.workspace }}
 
     - name: CMake Build
-      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
       shell: cmd
+      run: cmake --build ${{ env.CMAKE_BUILD_DIR }} --config ${{ inputs.build-configuration }}
 
-    - name: Artifact Windows
+    - name: Setup Artifact Suffix
+      shell: cmd
+      run: |
+        set ARTIFACT_SUFFIX=
+
+        if not "${{ inputs.version }}" == "" (
+            set ARTIFACT_SUFFIX=-v${{ inputs.version }}
+        )
+
+        if "${{ inputs.append-sha-to-artifact }}" == "true" (
+            set ARTIFACT_SUFFIX=%ARTIFACT_SUFFIX%-${{ github.sha }}
+        )
+
+        if not "%ARTIFACT_SUFFIX%" == "" (
+            echo artifact_suffix=%ARTIFACT_SUFFIX% >> %GITHUB_ENV%
+        )
+
+    - name: Artifact Windows VST3
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST3${{ inputs.custom-suffix }}-${{ github.sha }}
-        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+        name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST3${{ env.artifact_suffix }}
+        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
 
   #--------------------------------------------------------------
   # Mac
@@ -81,30 +111,49 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout JUCE Submodule
+      shell: bash
       run: |
         cd libs/JUCE
-        git submodule update --init
         git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
-      shell: bash
 
     - name: CMake Create Buildsystem
-      run: cmake -D CMAKE_OSX_ARCHITECTURES="arm64;x86_64" -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
       shell: bash
+      run: cmake -B ${{ env.CMAKE_BUILD_DIR }} -D CMAKE_OSX_ARCHITECTURES="arm64;x86_64" -G Xcode ${{ github.workspace }}
 
     - name: CMake Build
-      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
       shell: bash
+      run: cmake --build ${{ env.CMAKE_BUILD_DIR }} --config ${{ inputs.build-configuration }}
+
+    - name: Setup Artifact Suffix
+      shell: bash
+      run: |
+        ARTIFACT_SUFFIX=
+
+        if [ "${{ inputs.version }}" != "" ]; then
+            ARTIFACT_SUFFIX=-v${{ inputs.version }}
+        fi
+
+        if [ "${{ inputs.append-sha-to-artifact }}" = "true" ]; then
+            ARTIFACT_SUFFIX="${ARTIFACT_SUFFIX}-${{ github.sha }}"
+        fi
+
+        if [ "$ARTIFACT_SUFFIX" != "" ]; then
+            echo "artifact_suffix=$ARTIFACT_SUFFIX" >> $GITHUB_ENV
+        fi
 
     - name: Artifact Mac AU
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU${{ inputs.custom-suffix }}-${{ github.sha }}
-        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/AU/*
+        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU${{ env.artifact_suffix }}
+        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/AU/*
 
-    - name: Artifact Mac VST
+    - name: Artifact Mac VST3
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST3${{ inputs.custom-suffix }}-${{ github.sha }}
-        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/VST3/*
+        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST3${{ env.artifact_suffix }}
+        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
