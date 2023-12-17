@@ -3,7 +3,7 @@ name: build
 env:
   # Contants
   PREFIX: GifSyncAnimator
-  BUILD_DIR: __build
+  CMAKE_BUILD_DIR: __build
   JUCE_GIT_USE_TAGNAME: 7.0.9
   # Variables
   artifact_suffix: ""
@@ -60,22 +60,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout JUCE Submodule
       shell: cmd
       run: |
         cd libs\JUCE
-        git submodule update --init
-        echo Use JUCE version: ${{ env.JUCE_GIT_USE_TAGNAME }}
         git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
 
     - name: CMake Create Buildsystem
       shell: cmd
-      run: cmake -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
+      run: cmake -B ${{ env.CMAKE_BUILD_DIR }} ${{ github.workspace }}
 
     - name: CMake Build
       shell: cmd
-      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
+      run: cmake --build ${{ env.CMAKE_BUILD_DIR }} --config ${{ inputs.build-configuration }}
 
     - name: Setup Artifact Suffix
       shell: cmd
@@ -98,7 +99,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST3${{ env.artifact_suffix }}
-        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
 
   #--------------------------------------------------------------
   # Mac
@@ -110,22 +111,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout JUCE Submodule
       shell: bash
       run: |
         cd libs/JUCE
-        git submodule update --init
-        echo Use JUCE version: ${{ env.JUCE_GIT_USE_TAGNAME }}
         git checkout ${{ env.JUCE_GIT_USE_TAGNAME }}
 
     - name: CMake Create Buildsystem
       shell: bash
-      run: cmake -D CMAKE_OSX_ARCHITECTURES="arm64;x86_64" -B ${{ env.BUILD_DIR }} ${{ github.workspace }}
+      run: cmake -D CMAKE_OSX_ARCHITECTURES="arm64;x86_64" -B ${{ env.CMAKE_BUILD_DIR }} ${{ github.workspace }}
 
     - name: CMake Build
       shell: bash
-      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build-configuration }}
+      run: cmake --build ${{ env.CMAKE_BUILD_DIR }} --config ${{ inputs.build-configuration }}
 
     - name: Setup Artifact Suffix
       shell: bash
@@ -148,10 +150,10 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU$${{ env.artifact_suffix }}
-        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/AU/*
+        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/AU/*
 
     - name: Artifact Mac VST
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST3${{ env.artifact_suffix }}
-        path: ${{ env.BUILD_DIR }}/${{ env.PREFIX }}_artefacts/VST3/*
+        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/VST3/*
