@@ -149,7 +149,7 @@ jobs:
     - name: Artifact Mac AU
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU$${{ env.artifact_suffix }}
+        name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU${{ env.artifact_suffix }}
         path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/AU/*
 
     - name: Artifact Mac VST3
