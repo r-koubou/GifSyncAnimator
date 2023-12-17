@@ -81,7 +81,7 @@ jobs:
     - name: Setup Artifact Suffix
       shell: cmd
       run: |
-        set ARTIFACT_SUFFIX=""
+        set ARTIFACT_SUFFIX=
 
         if not "${{ inputs.version }}" == "" (
             set ARTIFACT_SUFFIX=v${{ inputs.version }}
@@ -132,7 +132,7 @@ jobs:
     - name: Setup Artifact Suffix
       shell: bash
       run: |
-        ARTIFACT_SUFFIX=""
+        ARTIFACT_SUFFIX=
 
         if [ "${{ inputs.version }}" != "" ]; then
             ARTIFACT_SUFFIX=v${{ inputs.version }}
