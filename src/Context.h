@@ -34,6 +34,7 @@ namespace rkoubou::GifSync
     class Context : public IContextAccessor
     {
     private:
+        const bool playHeadAvailable;
         bool loaded = false;
         juce::AudioProcessor& processor;
         std::unique_ptr<GifModel> gifModel;
@@ -53,6 +54,7 @@ namespace rkoubou::GifSync
         void loadGif( const juce::File& file );
         void loadGif( juce::MemoryBlock& block );
 
+        bool isPlayHeadAvailable() const;
         bool isLoaded() const;
 
         AnimationScale getAnimationScale() const override;

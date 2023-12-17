@@ -7,6 +7,9 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = space
 
+[*.bat]
+end_of_line = crlf
+
 [*.{c++,cc,cpp,cxx,h,h++,hh,hpp,hxx,inl,ipp,tlh,tli}]
 indent_size = 4
 

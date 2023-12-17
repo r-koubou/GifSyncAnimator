@@ -115,6 +115,8 @@ void GifSyncAnimatorAudioProcessor::prepareToPlay (double sampleRate, int sample
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    this->sampleRate = sampleRate;
+    this->currentPpqPosition = 0.0;
 }
 
 void GifSyncAnimatorAudioProcessor::releaseResources()
@@ -182,6 +184,56 @@ void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         // ..do something to the data...
     }
 #endif
+
+    if( context->isLoaded() )
+    {
+        juce::AudioPlayHead::CurrentPositionInfo positionInfo;
+        if( auto* playHead = getPlayHead() )
+        {
+            processPpqPositionWithPlayHead( *playHead );
+        }
+        else
+        {
+            processPpqPositionWithManual( buffer, midiMessages );
+        }
+    }
+}
+
+void GifSyncAnimatorAudioProcessor::processPpqPositionWithPlayHead( juce::AudioPlayHead& playHead )
+{
+    juce::AudioPlayHead::CurrentPositionInfo positionInfo;
+
+    playHead.getCurrentPosition( positionInfo );
+
+    if( positionInfo.isPlaying )
+    {
+        context->getGifAnimator().calculateCurrentFrame( positionInfo.ppqPosition );
+    }
+}
+
+void GifSyncAnimatorAudioProcessor::processPpqPositionWithManual( juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages )
+{
+    int numSamples = buffer.getNumSamples();
+
+    // Check tempo, loops, jumps and other events.
+    for( const auto metadata : midiMessages )
+    {
+        auto message = metadata.getMessage();
+        if( message.isTempoMetaEvent() )
+        {
+            double secondsPerQuarterNote = message.getTempoSecondsPerQuarterNote();
+            this->tempoInBpm = 60.0 / secondsPerQuarterNote;
+        }
+    }
+
+    // Update playback position (PPQ)
+    double ppqPerSample = 1.0 / (sampleRate / 60.0 / tempoInBpm / 4.0);
+    this->currentPpqPosition += numSamples * ppqPerSample;
+
+    if( context->isLoaded() )
+    {
+        context->getGifAnimator().calculateCurrentFrame( currentPpqPosition );
+    }
 }
 
 //==============================================================================

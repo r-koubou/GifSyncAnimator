@@ -43,7 +43,9 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void processBlock( juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages ) override;
+    void processPpqPositionWithPlayHead( juce::AudioPlayHead& playHead );
+    void processPpqPositionWithManual( juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages );
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -71,6 +73,9 @@ public:
 private:
     //==============================================================================
     rkoubou::GifSync::Context *context;
+    double sampleRate = 0.0;
+    double currentPpqPosition = 0.0;
+    double tempoInBpm = 0.0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GifSyncAnimatorAudioProcessor)
 };

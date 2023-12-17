@@ -222,8 +222,6 @@ namespace rkoubou::GifSync
         }
 
         repaint();
-        int time = context.getGifAnimator().process();
-        startTimer( time );
+        startTimer( timerInterval );
     }
-
 }

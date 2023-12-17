@@ -61,6 +61,8 @@ namespace rkoubou::GifSync
 #pragma endregion
 
     private:
+        const int timerInterval = (int)(1000.0 / 30.0);
+
         Context& context;
         juce::AudioProcessorEditor& editor;
         std::unique_ptr<juce::FileChooser> fileChooser;
