@@ -33,40 +33,9 @@ namespace rkoubou::GifSync
     GifAnimator::~GifAnimator()
     {}
 
-    int GifAnimator::process( double ppq )
-    {
-        if( !model.isLoaded() || model.getFrameCount() == 0 )
-        {
-            return interval;
-        }
-
-        juce::AudioPlayHead::CurrentPositionInfo positionInfo;
-        if( auto* playHead = processor.getPlayHead() )
-        {
-            playHead->getCurrentPosition( positionInfo );
-            if( positionInfo.isPlaying )
-            {
-                currentFrame = calculateCurrentFrame( positionInfo.ppqPosition );
-            }
-            return interval;
-        }
-
-        int result = model.getFrameTime( currentFrame );
-        currentFrame++;
-        currentFrame %= model.getFrameCount();
-
-        return result * 10;
-    }
-
-    uint32_t GifAnimator::calculateCurrentFrame( double ppq ) const
+    void GifAnimator::calculateCurrentFrame( double ppq )
     {
         const auto frameSize = model.getFrameCount();
-
-        if (frameSize <= 0)
-        {
-            return 0;
-        }
-
         double factor = 100; // 1x == 100%
 
         switch( context.getAnimationScale() )
@@ -116,7 +85,7 @@ namespace rkoubou::GifSync
         int pos = (int)( ppq * factor ) % 100;
         int newFrame = ( ( frameSize * pos ) / 100 ) % frameSize;
 
-        return newFrame;
+        currentFrame = newFrame;
     }
 
     uint32_t GifSync::GifAnimator::getCurrentFrame() const

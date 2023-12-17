@@ -185,10 +185,37 @@ void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     }
 #endif
 
-    int numSamples = buffer.getNumSamples(); // バッファサイズを取得
+    if( context->isLoaded() )
+    {
+        juce::AudioPlayHead::CurrentPositionInfo positionInfo;
+        if( auto* playHead = getPlayHead() )
+        {
+            processPpqPositionWithPlayHead( *playHead );
+        }
+        else
+        {
+            processPpqPositionWithManual( buffer, midiMessages );
+        }
+    }
+}
 
-    // テンポやループ、ジャンプなどのイベントをチェック
-    // （例：MIDIメッセージからテンポ変更を検出する）
+void GifSyncAnimatorAudioProcessor::processPpqPositionWithPlayHead( juce::AudioPlayHead& playHead )
+{
+    juce::AudioPlayHead::CurrentPositionInfo positionInfo;
+
+    playHead.getCurrentPosition( positionInfo );
+
+    if( positionInfo.isPlaying )
+    {
+        context->getGifAnimator().calculateCurrentFrame( positionInfo.ppqPosition );
+    }
+}
+
+void GifSyncAnimatorAudioProcessor::processPpqPositionWithManual( juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages )
+{
+    int numSamples = buffer.getNumSamples();
+
+    // Check tempo, loops, jumps and other events.
     for( const auto metadata : midiMessages )
     {
         auto message = metadata.getMessage();
@@ -199,13 +226,13 @@ void GifSyncAnimatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
 
-    // 再生位置（PPQ）を更新
+    // Update playback position (PPQ)
     double ppqPerSample = 1.0 / (sampleRate / 60.0 / tempoInBpm / 4.0);
     this->currentPpqPosition += numSamples * ppqPerSample;
 
     if( context->isLoaded() )
     {
-        context->getGifAnimator().process( currentPpqPosition );
+        context->getGifAnimator().calculateCurrentFrame( currentPpqPosition );
     }
 }
 

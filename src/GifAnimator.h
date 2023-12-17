@@ -43,8 +43,7 @@ namespace rkoubou::GifSync
         GifAnimator( IContextAccessor& ctx, juce::AudioProcessor& processor, GifModel& model );
         ~GifAnimator();
 
-        int process( double ppq );
-        uint32_t calculateCurrentFrame( double ppq ) const;
+        void calculateCurrentFrame( double ppq );
 
         uint32_t getCurrentFrame() const;
         juce::Image& getCurrentFrameImage() const;
