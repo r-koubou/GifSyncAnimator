@@ -84,7 +84,7 @@ jobs:
         set ARTIFACT_SUFFIX=
 
         if not "${{ inputs.version }}" == "" (
-            set ARTIFACT_SUFFIX=v${{ inputs.version }}
+            set ARTIFACT_SUFFIX=-v${{ inputs.version }}
         )
 
         if "${{ inputs.append-sha-to-artifact }}" == "true" (
@@ -92,7 +92,7 @@ jobs:
         )
 
         if not "%ARTIFACT_SUFFIX%" == "" (
-            echo artifact_suffix=-%ARTIFACT_SUFFIX% >> %GITHUB_ENV%
+            echo artifact_suffix=%ARTIFACT_SUFFIX% >> %GITHUB_ENV%
         )
 
     - name: Artifact Windows VST3
@@ -135,7 +135,7 @@ jobs:
         ARTIFACT_SUFFIX=
 
         if [ "${{ inputs.version }}" != "" ]; then
-            ARTIFACT_SUFFIX=v${{ inputs.version }}
+            ARTIFACT_SUFFIX=-v${{ inputs.version }}
         fi
 
         if [ "${{ inputs.append-sha-to-artifact }}" = "true" ]; then
@@ -143,7 +143,7 @@ jobs:
         fi
 
         if [ "$ARTIFACT_SUFFIX" != "" ]; then
-            echo "artifact_suffix=-$ARTIFACT_SUFFIX" >> $GITHUB_ENV
+            echo "artifact_suffix=$ARTIFACT_SUFFIX" >> $GITHUB_ENV
         fi
 
     - name: Artifact Mac AU
