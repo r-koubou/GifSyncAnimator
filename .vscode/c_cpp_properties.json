@@ -8,7 +8,23 @@
                 "${workspaceFolder}/build/GifSyncAnimator_artefacts/JuceLibraryCode/**"
             ],
             "intelliSenseMode": "msvc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "defines": [
+                "JucePlugin_Name=\"GifSyncAnimator\""
+            ]
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/libs/JUCE/modules/**",
+                "${workspaceFolder}/build/GifSyncAnimator_artefacts/JuceLibraryCode/**"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "defines": [
+                "JucePlugin_Name=\"GifSyncAnimator\""
+            ]
         }
     ],
     "version": 4
