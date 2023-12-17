@@ -95,11 +95,6 @@ jobs:
             echo artifact_suffix=%ARTIFACT_SUFFIX% >> %GITHUB_ENV%
         )
 
-    - name: Copying Assets to VST build artefact
-      shell: cmd
-      run: |
-        xcopy /E ${{ env.CMAKE_BUILD_DIR }}\${{ env.PREFIX }}_assets\* ${{ env.CMAKE_BUILD_DIR }}\${{ env.PREFIX }}_artefacts\${{ inputs.build-configuration }}\VST3\
-
     - name: Artifact Windows VST3
       uses: actions/upload-artifact@v3
       with:
@@ -150,16 +145,6 @@ jobs:
         if [ "$ARTIFACT_SUFFIX" != "" ]; then
             echo "artifact_suffix=$ARTIFACT_SUFFIX" >> $GITHUB_ENV
         fi
-
-    - name: Copying Assets to AU build artefact
-      shell: bash
-      run: |
-        cp -r ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_assets/* ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/AU/
-
-    - name: Copying Assets to VST build artefact
-      shell: bash
-      run: |
-        cp -r ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_assets/* ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/
 
     - name: Artifact Mac AU
       uses: actions/upload-artifact@v3

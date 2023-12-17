@@ -142,11 +142,19 @@ target_link_libraries(GifSyncAnimator
 # Copies of files to be included in artifacts in GitHub Actions
 # destination: ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets
 
-# 1. Under the repository root directory
+# 1. Under the repository root directory filse to work directory
 configure_file(${CMAKE_CURRENT_LIST_DIR}/README.md ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets/README.md COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/LICENSE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets/LICENSE COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/NOTICE.md ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets/NOTICE.md COPYONLY)
 
-# 2. assets directory
+# 2. assets directory to work directory
 file(GLOB ASSET_FILES ${CMAKE_CURRENT_LIST_DIR}/assets/**)
 file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets)
+
+# 3. All files copy to artefacts directory
+file(GLOB ASSET_FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets/**)
+file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/Debug/AU)
+file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/Debug/VST3)
+
+file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/Release/AU)
+file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/Release/VST3)
