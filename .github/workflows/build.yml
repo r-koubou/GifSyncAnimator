@@ -99,7 +99,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Windows-${{ inputs.build-configuration }}-VST3${{ env.artifact_suffix }}
-        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+        path: |
+          ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+          ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_assets/**
 
   #--------------------------------------------------------------
   # Mac
@@ -150,10 +152,14 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-AU${{ env.artifact_suffix }}
-        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/AU/*
+        path: |
+          ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/AU/*
+          ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_assets/**
 
     - name: Artifact Mac VST3
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PREFIX }}-Mac-${{ inputs.build-configuration }}-VST3${{ env.artifact_suffix }}
-        path: ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+        path: |
+          ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_artefacts/${{ inputs.build-configuration }}/VST3/*
+          ${{ env.CMAKE_BUILD_DIR }}/${{ env.PREFIX }}_assets/**
