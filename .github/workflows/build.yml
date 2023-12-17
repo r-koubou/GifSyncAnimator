@@ -83,7 +83,7 @@ jobs:
         set ARTIFACT_SUFFIX=""
 
         if not "${{ inputs.version }}" == "" (
-            set ARTIFACT_SUFFIX=${{ inputs.version }}
+            set ARTIFACT_SUFFIX=v${{ inputs.version }}
         )
 
         if "${{ inputs.append-sha-to-artifact }}" == "true" (
@@ -133,7 +133,7 @@ jobs:
         ARTIFACT_SUFFIX=""
 
         if [ "${{ inputs.version }}" != "" ]; then
-            ARTIFACT_SUFFIX=${{ inputs.version }}
+            ARTIFACT_SUFFIX=v${{ inputs.version }}
         fi
 
         if [ "${{ inputs.append-sha-to-artifact }}" = "true" ]; then
@@ -141,7 +141,7 @@ jobs:
         fi
 
         if [ "$ARTIFACT_SUFFIX" != "" ]; then
-            echo "artifact_suffix=$ARTIFACT_SUFFIX" >> $GITHUB_ENV
+            echo "artifact_suffix=-$ARTIFACT_SUFFIX" >> $GITHUB_ENV
         fi
 
     - name: Artifact Mac AU
