@@ -14,5 +14,5 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      build-platform: "Windows"
+      build-platform: "Windows, Mac"
       build-configuration: Debug
