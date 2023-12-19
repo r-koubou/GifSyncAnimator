@@ -5,9 +5,14 @@ GifSyncAnimator は、DAW (Digital Audio Workstation) 上で GIF アニメーシ
 
 ## 対応OS
 
-- Windows VST3
-- macOS VST3 (現在配布は行っていません)
-- macOS AU (現在配布は行っていません)
+| OS                            | VST3 | AU  |
+| ----------------------------- | ---- | --- |
+| Windows (Intel x86_64)        | ✔   |     |
+| macOS (AppleSilicon arm64) *1 | ✔   | ✔  |
+| macOS (Intel x86_64) *1       | ✔   | ✔  |
+
+\*1 macOS では、現在プラグイン本体の配布は行っていません。
+DAWを使用する Mac 上でビルドを行う必要があります。詳しは、[macOSユーザーの方へ](#for_mac_users) を参照してください
 
 ## 注記
 
@@ -36,13 +41,15 @@ GifSyncAnimator は、DAW (Digital Audio Workstation) 上で GIF アニメーシ
 - Studio One
 - Logic Pro X
 
+<a id="for_mac_users"></a>
+
 ## macOSユーザーの方へ
 
 > [!IMPORTANT]
 > macOS では、macOSのセキュリティ上の仕様から、現在配布は行っていません。DAWを使用する Mac 上でビルドを行う必要があります
 > 私が Apple Developer Program に参加し、年間99米ドルを支払うことで Appleから署名を発行することで配布可能になりますが、現時点ではその予定はありません
 
-## ビルド方法
+## ソースコードからビルドする
 
 ### 共通
 

@@ -5,9 +5,14 @@ GifSyncAnimator is a plugin for synchronizing GIF animations with music in a DAW
 
 ## Supported OS
 
-- Windows VST3
-- macOS VST3 (currently not distributed)
-- macOS AU (currently not distributed)
+| OS                            | VST3 | AU  |
+| ----------------------------- | ---- | --- |
+| Windows (Intel x86_64)        | ✔   |     |
+| macOS (AppleSilicon arm64) *1 | ✔   | ✔  |
+| macOS (Intel x86_64) *1       | ✔   | ✔  |
+
+*1 On macOS, the plugin itself is not currently distributed.
+You will need to build it on a Mac using DAW. For more details, please refer to [For macOS users](#for_mac_users).
 
 ## Notes
 
@@ -34,13 +39,15 @@ By default, the animation performs one loop per measure. If this is too fast or 
 - Studio One
 - Logic Pro X
 
-## To macOS Users
+<a id="for_mac_users"></a>
+
+## For macOS Users
 
 > [!IMPORTANT]
 > On macOS, due to security specifications of macOS, distribution is not currently undertaken. It is necessary to build on the Mac using the DAW.
 > I can distribute it by joining the Apple Developer Program and paying an annual fee of 99 US dollars, allowing Apple to issue a signature, but there are no plans for this at present.
 
-## Build Instructions
+## Build from source code
 
 ### Common
 
