@@ -3,6 +3,12 @@ GifSyncAnimator
 
 GifSyncAnimator は、DAW (Digital Audio Workstation) 上で GIF アニメーションを同期再生するプラグインです。
 
+## 対応OS
+
+- Windows VST3
+- macOS VST3 (現在配布は行っていません)
+- macOS AU (現在配布は行っていません)
+
 ## 注記
 
 ### マウス操作の表記について
@@ -16,7 +22,10 @@ GifSyncAnimator は、DAW (Digital Audio Workstation) 上で GIF アニメーシ
 1. プラグインを DAW 上でロードし、ウィンドウ内をクリックするとファイル選択ダイアログが開きます
 2. DAW 上で再生すると、GIF アニメーションが同期再生されます
 
-## 速度の調整
+## アニメーション速度の調整
+
+デフォルトでは 1 小節で1ループするアニメーションを行います。
+早すぎる、遅すぎる場合は、アニメーション速度を調整できます。
 
 1. GIF ファイルロード後、ウィンドウ内を右クリックすると、ポップアップメニューが開きます
 2. ポップアップメニュー内の項目を選択して、再生速度を調整できます
@@ -31,7 +40,7 @@ GifSyncAnimator は、DAW (Digital Audio Workstation) 上で GIF アニメーシ
 
 > [!IMPORTANT]
 > macOS では、macOSのセキュリティ上の仕様から、現在配布は行っていません。DAWを使用する Mac 上でビルドを行う必要があります
-> Apple Developer Program に参加し、私が年間99米ドルを支払うことで Appleから署名を発行することで配布可能になりますが、現時点ではその予定はありません
+> 私が Apple Developer Program に参加し、年間99米ドルを支払うことで Appleから署名を発行することで配布可能になりますが、現時点ではその予定はありません
 
 ## ビルド方法
 

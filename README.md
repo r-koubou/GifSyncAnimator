@@ -1,13 +1,17 @@
 GifSyncAnimator
 =======================
 
-[日本語](README.ja.md)
+GifSyncAnimator is a plugin for synchronizing GIF animations with music in a DAW (Digital Audio Workstation).
 
-GifSyncAnimator is a plugin for synchronizing GIF animations in a Digital Audio Workstation (DAW).
+## Supported OS
+
+- Windows VST3
+- macOS VST3 (currently not distributed)
+- macOS AU (currently not distributed)
 
 ## Notes
 
-### Regarding Mouse Operation Notation
+### About Mouse Operation Notation
 
 > [!NOTE]
 > - Mouse clicks and right-clicks mentioned in this document assume the default 'right-hand setting' of the OS.
@@ -15,15 +19,17 @@ GifSyncAnimator is a plugin for synchronizing GIF animations in a Digital Audio 
 
 ## How to Use
 
-1. Load the plugin in your DAW, and click within the window to open a file selection dialog.
-2. When you play on the DAW, the GIF animation will be synchronized and played.
+1. Load the plugin in your DAW, and click within the window to open the file selection dialog.
+2. When you play in the DAW, the GIF animation will play in sync.
 
-## Speed Adjustment
+## Adjusting Animation Speed
+
+By default, the animation performs one loop per measure. If this is too fast or too slow, you can adjust the animation speed.
 
 1. After loading the GIF file, right-click within the window to open a popup menu.
 2. You can adjust the playback speed by selecting options from the popup menu.
 
-## Tested DAWs
+## DAWs Tested
 
 - Studio One
 - Logic Pro X
@@ -31,8 +37,8 @@ GifSyncAnimator is a plugin for synchronizing GIF animations in a Digital Audio 
 ## To macOS Users
 
 > [!IMPORTANT]
-> Currently, distribution is not carried out on macOS due to security specifications of macOS. It is necessary to build on the Mac used for the DAW.
-> Joining the Apple Developer Program and paying an annual fee of 99 US dollars allows for the distribution after receiving a signature from Apple, but there are no plans for this at present.
+> On macOS, due to security specifications of macOS, distribution is not currently undertaken. It is necessary to build on the Mac using the DAW.
+> I can distribute it by joining the Apple Developer Program and paying an annual fee of 99 US dollars, allowing Apple to issue a signature, but there are no plans for this at present.
 
 ## Build Instructions
 
