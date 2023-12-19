@@ -31,7 +31,7 @@ on:
         description: "Target Platform"
         required: false
         type: string
-        default: "Windows, Mac"
+        default: "Windows"
       build-configuration:
         description: "Build configuration"
         required: true
