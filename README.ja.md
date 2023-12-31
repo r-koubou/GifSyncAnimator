@@ -3,6 +3,9 @@ GifSyncAnimator
 
 GifSyncAnimator は、DAW (Digital Audio Workstation) 上で GIF アニメーションを同期再生するプラグインです。
 
+![demo](./assets/docs/images/demo.gif)
+gif file from [Giphy](https://giphy.com/gifs/party-pizza-pizza58e2a1c2e81a0281819863-Ub8XEam5vXbMY)
+
 ## 対応OS
 
 | OS                            | VST3 | AU  |
@@ -35,6 +38,7 @@ DAWを使用する Mac 上でビルドを行う必要があります。詳しは
 1. GIF ファイルロード後、ウィンドウ内を右クリックすると、ポップアップメニューが開きます
 2. ポップアップメニュー内の項目を選択して、再生速度を調整できます
 
+![popup_menu](./assets/docs/images/popup_animation.jpg)
 
 ## 動作確認済みのDAW
 

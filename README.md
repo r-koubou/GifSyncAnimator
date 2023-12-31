@@ -3,6 +3,9 @@ GifSyncAnimator
 
 GifSyncAnimator is a plugin for synchronizing GIF animations with music in a DAW (Digital Audio Workstation).
 
+![demo](./assets/docs/images/demo.gif)
+gif file from [Giphy](https://giphy.com/gifs/party-pizza-pizza58e2a1c2e81a0281819863-Ub8XEam5vXbMY)
+
 ## Supported OS
 
 | OS                            | VST3 | AU  |
@@ -33,6 +36,8 @@ By default, the animation performs one loop per measure. If this is too fast or 
 
 1. After loading the GIF file, right-click within the window to open a popup menu.
 2. You can adjust the playback speed by selecting options from the popup menu.
+
+![popup_menu](./assets/docs/images/popup_animation.jpg)
 
 ## DAWs Tested
 
