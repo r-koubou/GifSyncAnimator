@@ -149,11 +149,14 @@ file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/LICENSE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets/LICENSE COPYONLY)
 
-# 2. assets directory to work directory
+# 2. documents directory to work directory
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/docs DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets)
+
+# 3. assets directory to work directory
 file(GLOB ASSET_FILES ${CMAKE_CURRENT_LIST_DIR}/assets/**)
 file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets)
 
-# 3. All files copy to artefacts directory
+# 4. All files copy to artefacts directory
 file(GLOB ASSET_FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets/**)
 file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/Debug/AU)
 file(COPY ${ASSET_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/Debug/VST3)
