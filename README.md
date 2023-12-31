@@ -84,7 +84,8 @@ By default, the animation performs one loop per measure. If this is too fast or 
 
 ### Location of the Built Plugin
 
-The `build/GifSyncAnimator_artefacts/release` directory contains folders for each built plugin format.
+- Debug Build: `build/GifSyncAnimator_artefacts/debug`
+- Release Build: `build/GifSyncAnimator_artefacts/release`
 
 ## License
 

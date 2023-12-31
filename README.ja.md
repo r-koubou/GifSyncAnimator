@@ -88,7 +88,8 @@ git submodule update --init --recursive
 
 ### ビルドされたプラグインの場所
 
-`build/GifSyncAnimator_artefacts/release` 以下に、ビルドされたプラグインフォーマットごとのフォルダがあります
+- デバッグビルド: `build/GifSyncAnimator_artefacts/debug`
+- リリースビルド: `build/GifSyncAnimator_artefacts/release`
 
 ## ライセンス
 
