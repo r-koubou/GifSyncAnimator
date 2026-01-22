@@ -139,6 +139,11 @@ target_link_libraries(GifSyncAnimator
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
 
+# Set UTF-8 source file encoding for MSVC
+if (MSVC)
+    add_definitions(/source-charset:utf-8)
+endif()
+
 # Copies of files to be included in artifacts in GitHub Actions
 # destination: ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets
 
