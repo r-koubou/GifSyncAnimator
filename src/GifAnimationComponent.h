@@ -56,6 +56,15 @@ namespace rkoubou::GifSync
             GuiScale125,
             GuiScale150,
             GuiScale200,
+            GuiScale250,
+            GuiScale300,
+            GuiScale400,
+            GuiScale500,
+            GuiScale600,
+            GuiScale700,
+            GuiScale800,
+            GuiScale900,
+            GuiScale1000,
             GuiScaleEnd,
         };
 #pragma endregion
