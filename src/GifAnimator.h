@@ -21,6 +21,7 @@ along with GifSyncAnimator. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <atomic>
 #include <JuceHeader.h>
 
 #include "IContextAccessor.h"
@@ -32,7 +33,7 @@ namespace rkoubou::GifSync
     {
     private:
         uint32_t interval = 30;
-        uint32_t currentFrame = 0;
+        std::atomic<uint32_t> currentFrame { 0 };
 
         IContextAccessor& context;
 

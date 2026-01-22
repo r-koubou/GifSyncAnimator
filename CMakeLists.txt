@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.15)
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(GifSyncAnimator VERSION 0.0.1)
+project(GifSyncAnimator VERSION 0.0.2)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -138,6 +138,11 @@ target_link_libraries(GifSyncAnimator
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
+
+# Set UTF-8 source file encoding for MSVC
+if (MSVC)
+    add_definitions(/source-charset:utf-8)
+endif()
 
 # Copies of files to be included in artifacts in GitHub Actions
 # destination: ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_assets

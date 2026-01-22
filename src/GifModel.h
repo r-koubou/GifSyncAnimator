@@ -52,6 +52,16 @@ namespace rkoubou::GifSync
         int width;
         int height;
 
+        // Disposal of the previous frame (BlendMode: 0..3 in gif_load.h)
+        int prevDisposalMode = 0;
+
+        // Rectangle from the previous frame (for background restoration)
+        juce::Rectangle<int> prevFrameRect;
+
+        // Background color (used only when removed)
+        bool hasBackgroundColour = false;
+        juce::Colour backgroundColour{ juce::Colours::transparentBlack };
+
     public:
         GifModel( const juce::File& gifFile );
         GifModel( juce::MemoryBlock& gif );

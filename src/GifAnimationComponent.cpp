@@ -84,9 +84,8 @@ namespace rkoubou::GifSync
 
                         if( w > 0 && h > 0 )
                         {
-                            setSize( w, h );
-                            editor.setSize( w, h );
-                            editor.setResizeLimits( w / 2, h / 2, w * 2, h * 2 );
+                            const auto scale = context.getRenderingScale();
+                            setRenderingScale( scale );
                         }
                     }
                 }
@@ -131,6 +130,15 @@ namespace rkoubou::GifSync
         subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale125, "125%", true, renderScale == RenderingScale::Scale125 );
         subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale150, "150%", true, renderScale == RenderingScale::Scale150 );
         subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale200, "200%", true, renderScale == RenderingScale::Scale200 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale250, "250%", true, renderScale == RenderingScale::Scale250 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale300, "300%", true, renderScale == RenderingScale::Scale300 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale400, "400%", true, renderScale == RenderingScale::Scale400 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale500, "500%", true, renderScale == RenderingScale::Scale500 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale600, "600%", true, renderScale == RenderingScale::Scale600 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale700, "700%", true, renderScale == RenderingScale::Scale700 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale800, "800%", true, renderScale == RenderingScale::Scale800 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale900, "900%", true, renderScale == RenderingScale::Scale900 );
+        subMenuGuiScale.addItem( (int)PopupMenuIds::GuiScale1000, "1000%", true, renderScale == RenderingScale::Scale1000 );
 
         juce::PopupMenu menu;
         menu.addSubMenu( "Animation Speed", subMenuSpeed );
@@ -153,6 +161,15 @@ namespace rkoubou::GifSync
             case RenderingScale::Scale125: factor = 1.25; break;
             case RenderingScale::Scale150: factor = 1.5; break;
             case RenderingScale::Scale200: factor = 2.0; break;
+            case RenderingScale::Scale250: factor = 2.5; break;
+            case RenderingScale::Scale300: factor = 3.0; break;
+            case RenderingScale::Scale400: factor = 4.0; break;
+            case RenderingScale::Scale500: factor = 5.0; break;
+            case RenderingScale::Scale600: factor = 6.0; break;
+            case RenderingScale::Scale700: factor = 7.0; break;
+            case RenderingScale::Scale800: factor = 8.0; break;
+            case RenderingScale::Scale900: factor = 9.0; break;
+            case RenderingScale::Scale1000: factor = 10.0; break;
             default:
                 break;
         }
@@ -205,6 +222,15 @@ namespace rkoubou::GifSync
                 case PopupMenuIds::GuiScale125: scale = RenderingScale::Scale125; break;
                 case PopupMenuIds::GuiScale150: scale = RenderingScale::Scale150; break;
                 case PopupMenuIds::GuiScale200: scale = RenderingScale::Scale200; break;
+                case PopupMenuIds::GuiScale250: scale = RenderingScale::Scale250; break;
+                case PopupMenuIds::GuiScale300: scale = RenderingScale::Scale300; break;
+                case PopupMenuIds::GuiScale400: scale = RenderingScale::Scale400; break;
+                case PopupMenuIds::GuiScale500: scale = RenderingScale::Scale500; break;
+                case PopupMenuIds::GuiScale600: scale = RenderingScale::Scale600; break;
+                case PopupMenuIds::GuiScale700: scale = RenderingScale::Scale700; break;
+                case PopupMenuIds::GuiScale800: scale = RenderingScale::Scale800; break;
+                case PopupMenuIds::GuiScale900: scale = RenderingScale::Scale900; break;
+                case PopupMenuIds::GuiScale1000: scale = RenderingScale::Scale1000; break;
                 default:
                     break;
             }
