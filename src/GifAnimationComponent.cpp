@@ -84,9 +84,8 @@ namespace rkoubou::GifSync
 
                         if( w > 0 && h > 0 )
                         {
-                            setSize( w, h );
-                            editor.setSize( w, h );
-                            editor.setResizeLimits( w / 2, h / 2, w * 2, h * 2 );
+                            const auto scale = context.getRenderingScale();
+                            setRenderingScale( scale );
                         }
                     }
                 }

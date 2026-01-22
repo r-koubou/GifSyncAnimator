@@ -121,6 +121,11 @@ namespace rkoubou::GifSync
         loaded = false;
         images.clear();
         animationTime.clear();
+
+        prevDisposalMode = 0;
+        prevFrameRect = {};
+        hasBackgroundColour = false;
+        backgroundColour = juce::Colours::transparentBlack;
     }
 
 #pragma region Gif loading
@@ -153,43 +158,190 @@ namespace rkoubou::GifSync
         width = std::max( width, (int)xdim );
         height = std::max( height, (int)ydim );
 
-        juce::Image img = juce::Image( juce::Image::ARGB, xdim, ydim, true );
+        const int canvasWidth = (int)xdim;
+        const int canvasHeight = (int)ydim;
 
+        const int frameW = (int)frxd;
+        const int frameH = (int)fryd;
+        const int offX = (int)frxo;
+        const int offY = (int)fryo;
+
+        // Retrieve the background color once only (with a guard in case it cannot be retrieved)
+        if( !hasBackgroundColour && cpal != nullptr && clrs > 0 && bkgd >= 0 && bkgd < clrs )
         {
             auto& [br, bg, bb] = cpal[ bkgd ];
-            auto g = juce::Graphics( img );
-            //g.fillAll(juce::Colour(br, bg, bb));
+            backgroundColour = juce::Colour( br, bg, bb );
+            hasBackgroundColour = true;
+        }
 
-            if( mode == GIF_CURR )
+        juce::Image img = juce::Image( juce::Image::ARGB, canvasWidth, canvasHeight, true );
+        juce::Graphics g( img );
+
+        const int DISPOSAL_RESTORE_BACKGROUND = 2;
+        const int DISPOSAL_RESTORE_PREVIOUS = 3;
+
+        if( !images.empty() )
+        {
+            if( prevDisposalMode == DISPOSAL_RESTORE_PREVIOUS && images.size() >= 2 )
             {
-                if( images.size() > 0 )
+                // Restore to the state before the previous frame (= images[size-2])
+                g.drawImageAt( images[ images.size() - 2 ], 0, 0 );
+            }
+            else
+            {
+                // Normally uses the previous frame as the base
+                g.drawImageAt( images.back(), 0, 0 );
+
+                if( prevDisposalMode == DISPOSAL_RESTORE_BACKGROUND && !prevFrameRect.isEmpty() )
                 {
-                    auto& prevImg = images[ images.size() - 1 ];
-                    g.drawImageAt( prevImg, 0, 0 );
+                    // Clear the previous frame's rectangle with the background (if the background color is unknown, clear it with transparency)
+                    g.setColour( hasBackgroundColour ? backgroundColour : juce::Colours::transparentBlack );
+                    g.fillRect( prevFrameRect );
                 }
             }
         }
-
-        for( int y = 0; y < fryd; ++y )
+        else
         {
-            for( int x = 0; x < frxd; ++x )
+            // First frame: If the background color is removed, fill it in (optional)
+            if( hasBackgroundColour ) {
+                g.fillAll( backgroundColour );
+            }
+        }
+
+        auto drawRow = [&]( int srcRow, int dstRowWithinFrame )
+        {
+            const int dstY = dstRowWithinFrame + offY;
+            if( (unsigned)dstY >= (unsigned)canvasHeight )
             {
-                const auto idx = bptr[ y * frxd + x ];
+                return;
+            }
+
+            for( int x = 0; x < frameW; ++x )
+            {
+                const int dstX = x + offX;
+                if( (unsigned)dstX >= (unsigned)canvasWidth )
+                {
+                    continue;
+                }
+
+                const int idx = (int)bptr[ srcRow * frameW + x ];
 
                 if( tran != -1 && tran == (long)idx )
                 {
                     continue;
                 }
-                else
+
+                if( cpal == nullptr || clrs <= 0 || idx < 0 || idx >= clrs )
                 {
-                    const auto [r, g, b] = cpal[ idx ];
-                    img.setPixelAt( x + frxo, y + fryo, juce::PixelARGB( 0xFF, r, g, b ) );
+                    continue;
+                }
+
+                const auto [r, gg, b] = cpal[ idx ];
+                img.setPixelAt( dstX, dstY, juce::PixelARGB( 0xFF, r, gg, b ) );
+            }
+        };
+
+        if( intr == 0 )
+        {
+            for( int y = 0; y < frameH; ++y ) {
+                drawRow( y, y );
+            }
+        }
+        else
+        {
+            // GIF interlace: 4-pass (start, step) = (0,8),(4,8),(2,4),(1,2)
+            int srcRow = 0;
+            const int starts[ 4 ] = { 0, 4, 2, 1 };
+            const int steps[ 4 ] = { 8, 8, 4, 2 };
+
+            for( int pass = 0; pass < 4; ++pass )
+            {
+                for( int dst = starts[ pass ]; dst < frameH && srcRow < frameH; dst += steps[ pass ] )
+                {
+                    drawRow( srcRow, dst );
+                    ++srcRow;
                 }
             }
         }
 
         images.emplace_back( std::move( img ) );
-        animationTime.emplace_back( time );
+        animationTime.emplace_back( (int)time );
+
+        // ---- 次フレーム用に「このフレームのdisposal」を保存 ----
+        prevDisposalMode = (int)mode;
+        prevFrameRect = juce::Rectangle<int>( offX, offY, frameW, frameH );
+
+/*
+        for( int y = 0; y < fryd; ++y )
+        {
+            for( int x = 0; x < frxd; ++x )
+            {
+                const int dstX = x + (int)frxo;
+                const int dstY = y + (int)fryo;
+
+                if( (unsigned)dstX >= (unsigned)canvasWidth ||
+                    (unsigned)dstY >= (unsigned)canvasHeight )
+                {
+                    continue;
+                }
+
+                //const auto idx = (int)bptr[y * (int)frxd + x];
+                const auto idx = (int)bptr[ dstY * canvasWidth + dstX ];
+
+                if( tran != -1 && tran == (long)idx )
+                {
+                    continue;
+                }
+
+                if( cpal == nullptr || clrs <= 0 || idx < 0 || idx >= clrs )
+                {
+                    continue;
+                }
+
+                const auto [r, gg, b] = cpal[ idx ];
+                img.setPixelAt( dstX, dstY, juce::PixelARGB( 0xFF, r, gg, b ) );
+            }
+        }
+
+        images.emplace_back( std::move( img ) );
+        animationTime.emplace_back( (int)time );
+*/
+
+        // {
+        //     auto& [br, bg, bb] = cpal[ bkgd ];
+        //     auto g = juce::Graphics( img );
+        //     //g.fillAll(juce::Colour(br, bg, bb));
+
+        //     if( mode == GIF_CURR )
+        //     {
+        //         if( images.size() > 0 )
+        //         {
+        //             auto& prevImg = images[ images.size() - 1 ];
+        //             g.drawImageAt( prevImg, 0, 0 );
+        //         }
+        //     }
+        // }
+
+        // for( int y = 0; y < fryd; ++y )
+        // {
+        //     for( int x = 0; x < frxd; ++x )
+        //     {
+        //         const auto idx = bptr[ y * frxd + x ];
+
+        //         if( tran != -1 && tran == (long)idx )
+        //         {
+        //             continue;
+        //         }
+        //         else
+        //         {
+        //             const auto [r, g, b] = cpal[ idx ];
+        //             img.setPixelAt( x + frxo, y + fryo, juce::PixelARGB( 0xFF, r, g, b ) );
+        //         }
+        //     }
+        // }
+
+        // images.emplace_back( std::move( img ) );
+        // animationTime.emplace_back( time );
     }
 
     void GifModel::gifFrameCallback( void* data, struct GIF_WHDR* whdr )
