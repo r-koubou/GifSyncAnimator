@@ -30,6 +30,15 @@ namespace rkoubou::GifSync
         Scale75,
         Scale125,
         Scale150,
-        Scale200
+        Scale200,
+        Scale250,
+        Scale300,
+        Scale400,
+        Scale500,
+        Scale600,
+        Scale700,
+        Scale800,
+        Scale900,
+        Scale1000
     };
 }

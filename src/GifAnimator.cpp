@@ -82,24 +82,70 @@ namespace rkoubou::GifSync
                 break;
         }
 
-        int pos = (int)( ppq * factor ) % 100;
-        int newFrame = ( ( frameSize * pos ) / 100 ) % frameSize;
+        // int pos = (int)( ppq * factor ) % 100;
+        // int newFrame = ( ( frameSize * pos ) / 100 ) % frameSize;
 
-        currentFrame = newFrame;
+        // currentFrame = newFrame;
+
+        const double speed = factor / 100.0;
+
+        // Normalize to the phase of 0..1 where ppq can be negative
+        double phase = std::fmod( ppq * speed, 1.0 );
+        if( phase < 0.0 )
+        {
+            phase += 1.0;
+        }
+
+        int newFrame = (int)std::floor( phase * (double)frameSize );
+        if( newFrame < 0 )
+        {
+            newFrame = 0;
+        }
+        if( newFrame >= frameSize )
+        {
+            newFrame = frameSize - 1;
+        }
+
+        currentFrame.store((uint32_t)newFrame, std::memory_order_relaxed);
     }
 
     uint32_t GifSync::GifAnimator::getCurrentFrame() const
     {
-        return currentFrame;
+        return currentFrame.load(std::memory_order_relaxed);
     }
 
     juce::Image& GifAnimator::getCurrentFrameImage() const
     {
-        return model.getFrameImage( currentFrame );
+        const auto frameSize = model.getFrameCount();
+        if( frameSize <= 0 )
+        {
+            static juce::Image empty;
+            return empty;
+        }
+
+        auto idx = (int)currentFrame.load( std::memory_order_relaxed );
+        if( idx < 0 || idx >= frameSize )
+        {
+            idx = 0;
+        }
+
+        return model.getFrameImage( idx );
     }
 
     int GifAnimator::getCurrentFrameTime() const
     {
-        return model.getFrameTime( currentFrame );
+        const auto frameSize = model.getFrameCount();
+        if( frameSize <= 0 )
+        {
+            return 0;
+        }
+
+        auto idx = (int)currentFrame.load( std::memory_order_relaxed );
+        if( idx < 0 || idx >= frameSize )idx = 0;
+        {
+            idx = 0;
+        }
+
+        return model.getFrameTime( idx );
     }
 }
